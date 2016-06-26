@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Cart</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+  <form>
+  <fieldset class="form-group">
+    <label for="thing">Name</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Name">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="formGroupExampleInput2">Address</label>
+    <input type="text" class="form-control" id="thing2" placeholder="Address">
+  </fieldset>
+    <fieldset class="form-group">
+    <label for="formGroupExampleInput3">Phone</label>
+    <input type="text" class="form-control" id="thing2" placeholder="Address">
+  </fieldset>
+    <fieldset class="form-group">
+    <label for="formGroupExampleInput4">Credit card</label>
+    <input type="text" class="form-control" id="thing2" placeholder="Address">
+  </fieldset>
+    <fieldset class="form-group">
+    <label for="formGroupExampleInput5">Notes</label>
+    <input type="text" class="form-control" id="thing2" placeholder="Address">
+  </fieldset>
+  
+  <button type="button" class="btn btn-default" onClick="empty()"><a href="/">Submit</a></button>
+
+</form>
+</body>
+<script>
+  function empty(){
+  var id = getCookie("id");
+  console.log("id: " +id);
+    $.post("/removeall/",
+    {
+       ID: id,
+    });
+    window.location.href = '/';
+  }
+  
+  function getCookie(id) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + id + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+</script>

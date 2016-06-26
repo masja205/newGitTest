@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Cart</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <meta content="">
+      <script>
+  function loadItems(){
+      var name = getCookie("id");
+      document.cookie = "id=" + name + ";max-age=900;";
+      
+    console.log(document.cookie);
+    var id = document.cookie;
+        $.ajax({
+	    url: "/cart/"+id,
+	    type: "GET"
+	}).then(display);
+	function display(data){
+	  console.log(data);
+	  var i=0;
+	  for(i; i < data.length ; i++){
+	  var img = "/images/" + data[i].imagepath
+	    $('body').append($('  <div class="col" style=""> <div class="col-sm-6 col-md-4"> <div class="thumbnail"><img src="'+img+'" alt="'+img+'" style="width:150px;height:150px"> <div class="caption"> <h3>'+data[i].itemname+'</h3> <p class="descrip">'+data[i].productdetails+'</p> <p>'+data[i].price+' </p>  <p><class="btn btn-primary" role="button" onClick="takeOut('+data[i].itemid+')">Remove </div></div>    </div></div>'));
+	    console.log(img);
+	  }
+	  $('body').append($('</div>'));
+	  $('body').append($('<div> <button type="button" class="btn btn-default" onClick="checkout()">Checkout</button> </div>'));
+	  var maxlength = 100;
+	  $('p.descrip').text(function (_, text) {
+	   return $.trim(text).substring(0, maxlength) + "...";
+	  });
+	
+	}
+    
+  }
+  
+  function checkout(itemID){
+    window.location.href = '/checkout.html'
+  }
+  function takeOut(itemID){
+  var id = getCookie("id");
+  console.log(itemID + " : " + id);
+    $.post("/remove/",
+    {
+       itemid: itemID,
+       ID: id
+    });
+    window.location.reload()
+  }
+  
+  function getCookie(id) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + id + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+  
+  </script>
+  </head>
+  <body onload="loadItems()">
+  
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Cart</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="/cart.html">Cart</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+  
+  
+  </body>
+  
+
+</html>

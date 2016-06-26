@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Search</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+    h3, p{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+  <script>
+  
+    function getInfo(){
+      //Strip variables from URL
+      //Stolen from : http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+      var urlParams;
+      (window.onpopstate = function () {
+          var match,
+              pl     = /\+/g,  // Regex for replacing addition symbol with a space
+              search = /([^&=]+)=?([^&]*)/g,
+              decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+              query  = window.location.search.substring(1);
+      
+          urlParams = {};
+          while (match = search.exec(query))
+             urlParams[decode(match[1])] = decode(match[2]);
+      })();
+      
+      //need to get the info for the bootstrap thumbnails
+        $.ajax({
+            url: "/search/"+urlParams.t1,
+	          type: "GET",
+              data: {
+               searchterm : urlParams.t1
+              }
+	      }).then(display);
+        
+	     function display(data){
+        //If no results then append string and return 
+        if(data.length==0){
+          $('body').append($('<div> <h5> No results found for your search query</h5></div>'));
+          return;
+        }
+	      var i=0;
+	      for(i; i < data.length ; i++){
+	      var img = "/images/" + data[i].imagepath
+	       $('body').append($('  <div class="col" style=""> <div class="col-sm-6 col-md-4"> <div class="thumbnail"><img src="'+img+'" alt="'+img+'" style="width:150px;height:150px">                                               <div class="caption"> <h3>'+data[i].itemname+'</h3> <p class="descrip">'+data[i].productdetails+'</p> <p>'+data[i].price+' </p>  <p><a href="#" class="btn btn-primary" role="button">Add to cart</a> </div></div>    </div></div>'));
+	  }
+	  $('body').append($('</div>'));
+	  
+	  var maxlength = 100;
+	  $('p.descrip').text(function (_, text) {
+	   return $.trim(text).substring(0, maxlength) + "...";
+	  });
+	
+	    }
+    }
+  
+  </script>
+</head>
+<body onload="getInfo();">
+ 
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Search Results</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+  
+  
+  
+<div class="container">
+  <h1 id="pageTitle">Search Results</h1>
+  <div class = "row" id="results">
+
+</body>
+</html>
